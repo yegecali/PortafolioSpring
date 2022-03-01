@@ -2,6 +2,7 @@ package com.yegecali.portafolio.controllers;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yegecali.portafolio.dtos.HabilidadDto;
 import com.yegecali.portafolio.models.Habilidad;
 import com.yegecali.portafolio.services.IHabilidadService;
 
@@ -24,6 +26,9 @@ public class HabilidadController {
 
 	@Autowired
 	private IHabilidadService habilidadService;
+	
+	@Autowired
+	private ModelMapper mapper;
 	
 	@GetMapping("/")
 	public ResponseEntity<List<Habilidad>> getHabilidades(){
@@ -40,7 +45,8 @@ public class HabilidadController {
 		}
 	}
 	@PostMapping("/")
-	public ResponseEntity<Habilidad> createHabilidad(@RequestBody Habilidad habilidad){
+	public ResponseEntity<Habilidad> createHabilidad(@RequestBody HabilidadDto habilidaddto){
+		Habilidad habilidad = mapper.map(habilidaddto, Habilidad.class);
 		habilidadService.saveHabilidad(habilidad);
 		return new ResponseEntity("Habilidad creada", HttpStatus.CREATED);
 	}
